@@ -19,7 +19,10 @@ class _CalculadoraNotaPageState extends State<CalculadoraNotaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme
+            .of(context)
+            .colorScheme
+            .primary,
         title: const Text("Calculadora de nota final"),
       ),
       backgroundColor: Colors.white70,
@@ -81,14 +84,17 @@ class _CalculadoraNotaPageState extends State<CalculadoraNotaPage> {
               const SizedBox(
                 height: 20.0,
               ),
-              ElevatedButton.icon(onPressed: (){_calcular();},label: Text("Calcular"),),
+              ElevatedButton.icon(onPressed: () {
+                _calcular();
+              }, label: Text("Calcular"),),
               const SizedBox(
                 height: 20.0,
               ),
 
               Text(
                 "La definitiva del curso es: ${_total.toStringAsFixed(1)} ",
-                style: const TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
+                style: const TextStyle(
+                    fontSize: 20, fontStyle: FontStyle.italic),
               ),
 
 
@@ -98,16 +104,52 @@ class _CalculadoraNotaPageState extends State<CalculadoraNotaPage> {
       ),
     );
   }
+
 //En esta función se hace el cálculo de la nota total
   void _calcular() {
 
-    setState(() {
-      _total =
-          double.parse(_nota_laboratorio.text) * 0.6 +
-          (double.parse(_nota_primer_avance.text) +
-                  double.parse(_nota_segundo_avance.text)) *
-              0.1 +
-          double.parse(_nota_entrega_final.text) * 0.2;
-    });
+    //Con el objetivo de mejorar la iteracción y ejecución de la aplicación, se procede con validaciones de datos.
+
+
+    //Se valida que ninguno de los campos este sin llenar
+    String labText = _nota_laboratorio.text.trim();
+    String avance1Text = _nota_primer_avance.text.trim();
+    String avance2Text = _nota_segundo_avance.text.trim();
+    String finalText = _nota_entrega_final.text.trim();
+
+
+    if (labText.isEmpty || avance1Text.isEmpty || avance2Text.isEmpty || finalText.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Todos los campos deben estar llenos")),
+      );
+      return;
+    }
+
+
+
+    //Se valida la nota, puesto que no se deben ingresar valores mayores a 5.0
+
+    double _notaLaboratorio = double.parse(_nota_laboratorio.text);
+    double _notaPrimerAvance = double.parse(_nota_primer_avance.text);
+    double _notaSegundoAvance = double.parse(_nota_segundo_avance.text);
+    double _notaEntregaFinal = double.parse(_nota_entrega_final.text);
+
+    if ((_notaLaboratorio > 5 || _notaPrimerAvance > 5 ||
+        _notaSegundoAvance > 5 || _notaEntregaFinal > 5)||(_notaLaboratorio < 0 || _notaPrimerAvance < 0 ||
+        _notaSegundoAvance < 0 || _notaEntregaFinal < 0)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Ninguna nota puede ser mayor a 5.0, ni menor a 0.0"),));
+    }
+
+    else {
+      setState(() {
+        _total =
+            _notaLaboratorio * 0.6 +
+                (_notaPrimerAvance +
+                    _notaSegundoAvance) *
+                    0.1 +
+                _notaEntregaFinal * 0.2;
+      });
+    }
   }
 }
