@@ -1,3 +1,4 @@
+import 'package:calculo_nota_final_p_movil/pages/calculadora_Nota_Page.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -8,8 +9,34 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+
+  @override
+  void initState() {
+    _close_splash_app();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Scaffold(
+      body: Center(
+        child: Image(
+            image: AssetImage("assets/images/logo.png"),
+          width: 150,
+          height: 150,
+        )
+      ),
+    );
+  }
+
+
+  Future<void>_close_splash_app() async {
+    Future.delayed(const Duration(seconds:3 ),()async{
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context)=> const CalculadoraNotaPage())
+      );
+
+    });
   }
 }
