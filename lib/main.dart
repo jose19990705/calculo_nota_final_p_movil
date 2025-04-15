@@ -1,4 +1,5 @@
-// La app esta completa.
+// La app esta completa. Tiene validaciones de datos.
+//Se hizo la interfaz en base a lo visto en clase.
 import 'package:flutter/material.dart';
 
 import 'pages/splash_Page.dart';
